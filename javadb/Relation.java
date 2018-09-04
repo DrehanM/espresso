@@ -1,9 +1,7 @@
-package javadb;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import Column;
-import Row;
+import Column.*;
 
 class Relation {
     /** A new Table whose columns are given by COLUMNTITLES, which may

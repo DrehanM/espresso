@@ -1,10 +1,10 @@
-package javadb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import Relation;
+import Relation.*;
+import Column.*;
 
 class Database implements Serializable {
     /** Constructor for Database. */
@@ -26,7 +26,7 @@ class Database implements Serializable {
         }
     }
 
-    
+
 
     private HashMap<String, Relation> _relations;
     private String _name;
