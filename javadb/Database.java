@@ -1,11 +1,12 @@
 package javadb;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import Relation;
 
-class Database {
+class Database implements Serializable {
     /** Constructor for Database. */
     public Database(String name) {
         _name = name;
@@ -14,12 +15,18 @@ class Database {
 
     /**  */
     public void put(String name, Relation rel) {
-        assert False;
+        if (_relations.containsKey(name)) {
+            throw new Exception("This database contains a relation with that name.");
+        }
     }
 
     public void drop(String name) {
-        assert False;
+        if (_relations.containsKey(name)) {
+            throw new Exception("No such relation with that name exists in this database.");
+        }
     }
+
+    
 
     private HashMap<String, Relation> _relations;
     private String _name;
