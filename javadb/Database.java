@@ -1,18 +1,15 @@
 package javadb;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 
 import Relation;
 
 class Database {
-    private HashSet<String, Relation> _relations;
-    private String _name;
-   
     /** Constructor for Database. */
     public Database(String name) {
         _name = name;
-        _relations = new HashSet<String, Relation>();
+        _relations = new HashMap<String, Relation>();
     }
 
     /**  */
@@ -23,4 +20,7 @@ class Database {
     public void drop(String name) {
         assert False;
     }
+
+    private HashMap<String, Relation> _relations;
+    private String _name;
 }
