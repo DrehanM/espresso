@@ -1,23 +1,21 @@
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
-class Column {
+class Column<T> {
 
     public Column(String name, Class<T> type) {
         _name = name;
         _type = type;
         _length = 0;
-        _elements = new ArrayList<type>();
+        _elements = new ArrayList<T>();
     }
 
-    public void put(_type element) {
+    public void put(Object element) {
         _elements.add(element);
         _length += 1;
     }
 
-    public _type get(int index) {
+    public Object get(int index) {
         return _elements.get(index);
     }
 
@@ -25,11 +23,11 @@ class Column {
         _elements.remove(index);
     }
 
-    public int del (_type target) {
+    public int del (T target) {
         int numRemoved;
-        _elements.removeIf(e -> e.equals(target));
-        numRemoved = _length - _elements.length;
-        _length = _elements.length;
+        _elements.remove(target);
+        numRemoved = _length - _elements.size();
+        _length = _elements.size();
         return numRemoved;
     }
 
