@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -6,18 +5,25 @@ import java.util.Map;
 class Relation {
     /** A new Table whose columns are given by COLUMNTITLES, which may
      *  not contain duplicate names. */
-    public Relation(ArrayList<String> columnNames) {
+    public Relation(ArrayList<String> columnNames, ArrayList<Class> columnTypes) {
         _colNames = columnNames;
         _primary = columnNames.get(0);
         _numColumns = columnNames.size();
         _rows = new ArrayList<>();
         _columns = new HashMap<>();
+        _colTypes = new HashMap<>();
+        for (int i = 0; i < _numColumns; i++) {
+            String colName = columnNames.get(i);
+            Class colType = columnTypes.get(i);
+            _columns.put(colName, new Column(colName, colType));
+            _colTypes.put(colName, colType);
+        }
     }
 
     public void put(Object[] row)
-        throws Exception {
+        throws IllegalArgumentException {
         if (row.length != _numColumns) {
-            throw new Exception("Invalid add: # of columns mismatched.");
+            throw new IllegalArgumentException("Invalid add: # of columns mismatched.");
         }
 
         for (String colName : _colNames) {
@@ -31,27 +37,9 @@ class Relation {
     }
 
     /** Return a hashmap mapping queried column names to the values in those columns. */
-    public Map<String, Object[]> get(String[] columnNames, boolean ya)
-        throws Exception {
-
-        HashMap<String, Object[]> result = new HashMap<>();
-
-        for (String colName : columnNames) {
-            if (!_columns.containsKey(colName)) {
-                throw new Exception("column not in schema");
-            }
-            ArrayList colvalues = new ArrayList<T>();
-            for (Object[] row: _rows) {
-                colvalues.add(row[_colNames.indexOf(colName)]);
-            }
-
-            result.put(colName, colvalues);
-        }
-        return result;
-    }
 
     public Map<String, Column> get(String... queriedColumns)
-        throws IllegalAccessException {
+        throws IllegalArgumentException {
         HashMap<String, Column> queryResult = new HashMap<>();
         for (String colName : queriedColumns) {
             if (!_colNames.contains(colName)) {
@@ -67,6 +55,7 @@ class Relation {
     private ArrayList<String> _colNames;
     private int _numColumns;
     private HashMap<String, Column> _columns;
+    private HashMap<String, Class> _colTypes;
     private String _primary;
 
     

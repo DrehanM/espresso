@@ -1,10 +1,6 @@
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-
-import Relation.*;
-import Column.*;
 
 class Database implements Serializable {
     /** Constructor for Database. */
@@ -14,15 +10,17 @@ class Database implements Serializable {
     }
 
     /**  */
-    public void put(String name, Relation rel) {
+    public void put(String name, Relation rel)
+        throws IllegalAccessException {
         if (_relations.containsKey(name)) {
-            throw new Exception("This database contains a relation with that name.");
+            throw new IllegalAccessException("This database contains a relation with that name.");
         }
     }
 
-    public void drop(String name) {
+    public void drop(String name)
+        throws IllegalAccessException {
         if (_relations.containsKey(name)) {
-            throw new Exception("No such relation with that name exists in this database.");
+            throw new IllegalAccessException("No such relation with that name exists in this database.");
         }
     }
 
