@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 class Relation {
-    /** A new Table whose columns are given by COLUMNTITLES, which may
+    /** A new Table whose columns are given by COLUMNNAMES which may
      *  not contain duplicate names. */
     public Relation(ArrayList<String> columnNames, ArrayList<Class> columnTypes) {
         _colNames = columnNames;
@@ -57,9 +57,5 @@ class Relation {
     private HashMap<String, Column> _columns;
     private HashMap<String, Class> _colTypes;
     private String _primary;
-
-    
-
-
 
 }
