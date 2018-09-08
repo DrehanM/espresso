@@ -5,28 +5,30 @@ import java.util.HashMap;
 
 class Database implements Serializable {
     /** Constructor for Database. */
+    public Database() {}
+
     public Database(String name) {
         _name = name;
-        _relations = new HashMap<>();
+        _tables = new HashMap<>();
     }
 
     /**  */
-    public void create(String name, Relation rel)
+    public void create(String name, Table table)
         throws IllegalAccessException {
-        if (_relations.containsKey(name)) {
+        if (_tables.containsKey(name)) {
             throw new IllegalAccessException("This database already contains a relation with that name.");
         }
 
-        _relations.put(name, rel);
+        _tables.put(name, table);
     }
 
-    public Relation retrieve(String name)
+    public Table retrieve(String name)
         throws IllegalAccessException {
-        if (_relations.containsKey(name)) {
+        if (_tables.containsKey(name)) {
             throw new IllegalAccessException("No such relation with that name exists in this database.");
         }
 
-        return _relations.get(name);
+        return _tables.get(name);
     }
 
     public boolean update(String name, String command) {
@@ -52,6 +54,6 @@ class Database implements Serializable {
         Utils.writeObject(dbFile, this);
     }
 
-    private HashMap<String, Relation> _relations;
+    private HashMap<String, Table> _tables;
     private String _name;
 }

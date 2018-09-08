@@ -1,3 +1,4 @@
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.util.logging.Logger;
 
@@ -15,11 +16,14 @@ public class Main {
             return;
         }
 
-        if (args[0].equals("-i")) {
-            System.out.println("=== Espresso Interactive Shell ===");
-            while (!false) {
-                break;
+        try {
+            File dbFile = new File(args[0]);
+            if (!dbFile.exists() && !args[1].equals("init")) {
+                System.out.println(args[0] + " does not exist.");
+            } else if (args[1].equals("init")) {
+                Database db = new Database();
             }
+
 
         }
     }

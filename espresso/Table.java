@@ -2,10 +2,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-class Relation {
-    /** A new Table whose columns are given by COLUMNNAMES which may
-     *  not contain duplicate names. */
-    public Relation(ArrayList<String> columnNames, ArrayList<Class> columnTypes) {
+class Table {
+    public Table(ArrayList<String> columnNames, ArrayList<Class> columnTypes) {
         _colNames = columnNames;
         _primary = columnNames.get(0);
         _numColumns = columnNames.size();

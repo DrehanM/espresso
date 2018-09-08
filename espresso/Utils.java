@@ -15,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 /** Assorted utilities.
@@ -140,8 +141,6 @@ class Utils {
         } catch (IOException | ClassCastException
                 | ClassNotFoundException excp) {
             throw new IllegalArgumentException(excp.getMessage());
-        } finally {
-
         }
     }
 
@@ -165,7 +164,10 @@ class Utils {
         }
     }
 
-
+    static Pattern mkPatn(String s, Object ... args) {
+        s = s.replace(" *", "\\s*").replace(" ", "\\s+");
+        return Pattern.compile(String.format(s, args));
+    }
 
     /* MESSAGES AND ERROR REPORTING */
 

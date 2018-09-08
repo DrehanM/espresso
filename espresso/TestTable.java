@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by Drehan on 9/5/18.
  */
-public class TestRelation {
+public class TestTable {
 
     @Test
     public void testColumnGet() {
