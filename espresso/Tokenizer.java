@@ -12,13 +12,13 @@ class Tokenizer {
             COMMENT_TEXT = "(?:/\\*.*?\\*/|/\\*.*)";
 
     private static final Pattern
-            TOKEN_PATN = mkPatn("(?s)[<>!]?=|%s|%s|%s|\r?\n|\\S",
+            TOKEN_PATN = Utils.mkPatn("(?s)[<>!]?=|%s|%s|%s|\r?\n|\\S",
             LITERAL_TEXT, IDENTIFIER_TEXT, COMMENT_TEXT);
 
     static final Pattern
-            IDENTIFIER = mkPatn(IDENTIFIER_TEXT),
-            LITERAL = mkPatn("'.*"),
-            RELATION = mkPatn("[<>!]?=|[<>]");
+            IDENTIFIER = Utils.mkPatn(IDENTIFIER_TEXT),
+            LITERAL = Utils.mkPatn("'.*"),
+            RELATION = Utils.mkPatn("[<>!]?=|[<>]");
 
     Tokenizer(Scanner s, PrintStream prompter) {
         _input = s;
