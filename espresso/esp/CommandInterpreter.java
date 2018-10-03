@@ -1,51 +1,57 @@
+package esp;
+
 import java.io.PrintStream;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static db61b.Utils.*;
-import static db61b.Tokenizer.*;
+import static esp.Utils.*;
 
+/** An object that reads and interprets a sequence of commands from an
+ *  input source. */
+class CommandInterpreter {
 
-class Parser {
-
-
-    Parser(Scanner inp, PrintStream prompter) {
+    /** A new CommandInterpreter executing commands read from INP, writing
+     *  prompts on PROMPTER, if it is non-null. */
+    CommandInterpreter(Scanner inp, PrintStream prompter) {
         _input = new Tokenizer(inp, prompter);
         _database = new Database();
     }
 
+    /** Parse and execute one statement from the token stream.  Return true
+     *  iff the command is something other than quit or exit. */
     boolean statement() {
         switch (_input.peek()) {
-            case "create":
-                createStatement();
-                break;
-            case "load":
-                loadStatement();
-                break;
-            case "exit": case "quit":
-                exitStatement();
-                return false;
-            case "*EOF*":
-                return false;
-            case "insert":
-                insertStatement();
-                break;
-            case "print":
-                printStatement();
-                break;
-            case "select":
-                selectStatement();
-                break;
-            case "store":
-                storeStatement();
-                break;
-            default:
-                throw new IllegalArgumentException("unrecognizable command");
+        case "create":
+            createStatement();
+            break;
+        case "load":
+            loadStatement();
+            break;
+        case "exit": case "quit":
+            exitStatement();
+            return false;
+        case "*EOF*":
+            return false;
+        case "insert":
+            insertStatement();
+            break;
+        case "print":
+            printStatement();
+            break;
+        case "select":
+            selectStatement();
+            break;
+        case "store":
+            storeStatement();
+            break;
+        default:
+            throw error("unrecognizable command");
         }
         return true;
     }
 
+    /** Parse and execute a create statement from the token stream. */
     void createStatement() {
         _input.next("create");
         _input.next("table");
@@ -55,6 +61,8 @@ class Parser {
         _input.next(";");
     }
 
+    /** Parse and execute an exit or quit statement. Actually does nothing
+     *  except check syntax, since statement() handles the actual exiting. */
     void exitStatement() {
         if (!_input.nextIf("quit")) {
             _input.next("exit");
@@ -62,6 +70,7 @@ class Parser {
         _input.next(";");
     }
 
+    /** Parse and execute an insert statement from the token stream. */
     void insertStatement() {
         _input.next("insert");
         _input.next("into");
@@ -91,6 +100,7 @@ class Parser {
         _input.next(";");
     }
 
+    /** Parse and execute a load statement from the token stream. */
     void loadStatement() {
         _input.next("load");
         String name = name();
@@ -100,6 +110,7 @@ class Parser {
         System.out.printf("Loaded %s.db%n", name);
     }
 
+    /** Parse and execute a store statement from the token stream. */
     void storeStatement() {
         _input.next("store");
         String name = _input.peek();
@@ -109,6 +120,7 @@ class Parser {
         _input.next(";");
     }
 
+    /** Parse and execute a print statement from the token stream. */
     void printStatement() {
         _input.next("print");
         String tableName = _input.peek();
@@ -118,6 +130,7 @@ class Parser {
         _input.next(";");
     }
 
+    /** Parse and execute a select statement from the token stream. */
     void selectStatement() {
         Table table = selectClause();
         System.out.println("Search results:");
@@ -144,6 +157,8 @@ class Parser {
         return table;
     }
 
+    /** Parse and execute a select clause from the token stream, returning the
+     *  resulting table. */
     Table selectClause() {
         _input.next("select");
         ArrayList<String> colNames = new ArrayList<>();
@@ -168,14 +183,20 @@ class Parser {
         return table;
     }
 
+    /** Parse and return a valid name (identifier) from the token stream. */
     String name() {
         return _input.next(Tokenizer.IDENTIFIER);
     }
 
+    /** Parse and return a valid column name from the token stream. Column
+     *  names are simply names; we use a different method name to clarify
+     *  the intent of the code. */
     String columnName() {
         return name();
     }
 
+    /** Parse a valid table name from the token stream, and return the Table
+     *  that it designates, which must be loaded. */
     Table tableName() {
         String name = name();
         Table table = _database.get(name);
@@ -185,11 +206,16 @@ class Parser {
         return table;
     }
 
+    /** Parse a literal and return the string it represents (i.e., without
+     *  single quotes). */
     String literal() {
         String lit = _input.next(Tokenizer.LITERAL);
         return lit.substring(1, lit.length() - 1).trim();
     }
 
+    /** Parse and return a list of Conditions that apply to TABLES from the
+     *  token stream.  This denotes the conjunction (`and') of zero
+     *  or more Conditions. */
     ArrayList<Condition> conditionClause(Table... tables) {
         ArrayList<Condition> conds = new ArrayList<Condition>();
         Condition cond;
@@ -204,6 +230,8 @@ class Parser {
         return conds;
     }
 
+    /** Parse and return a Condition that applies to TABLES from the
+     *  token stream. */
     Condition condition(Table... tables) {
         Column col1 = new Column(columnName(), tables);
         String relation = _input.next();
@@ -217,6 +245,7 @@ class Parser {
         return cond;
     }
 
+    /** Advance the input past the next semicolon. */
     void skipCommand() {
         while (true) {
             try {
@@ -224,7 +253,7 @@ class Parser {
                     _input.next();
                 }
                 return;
-            } catch (Exception e) {
+            } catch (DBException excp) {
                 /* No action */
             }
         }
